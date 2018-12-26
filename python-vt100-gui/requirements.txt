@@ -1,0 +1,5 @@
+numpy==1.14.2
+wxPython==4.0.3
+ws4py==0.5.1
+PyAudio==0.2.11
+requests==2.20.1
