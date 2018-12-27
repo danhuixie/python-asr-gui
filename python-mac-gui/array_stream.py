@@ -65,18 +65,18 @@ class RealTimeArrayStreamAsr():
         # device_name = "Array"
         self.array_dll.StartRecording(filename.encode())
         # print("after StartRecording")
-        string_data = bytes(self.fs * 2);
-        # print(string_data)
+        required_samples = int(12800)
+        string_data = bytes(required_samples * 2);
+        
         while True:
-            # print(num)
-            res = self.array_dll.ReadPcm(string_data, self.fs)
+            res = self.array_dll.ReadPcm(string_data, required_samples)
             audio_data = np.fromstring(string_data, dtype = np.short)
-            audio_data1 = audio_data[0 : res-1]
-            string_data1 = audio_data1.tostring()
+            # audio_data1 = audio_data[0 : res-1]
+            string_data1 = audio_data.tostring()
             wf.writeframes(string_data1)
             if self.ws._is_closed:
                 self.ws.connect()
-            th1 = threading.Thread(target = self.ws.diy_send_binary, args=(audio_data1,))
+            th1 = threading.Thread(target = self.ws.diy_send_binary, args=(audio_data,))
             th1.start()
             # if self.mutex.acquire():
             if not self.RecordingFlag:

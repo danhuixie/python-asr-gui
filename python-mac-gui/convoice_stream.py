@@ -74,9 +74,10 @@ class ConVoiceStreamAsr():
         self.audio_device_dll.StartRecording(filename.encode(), device_name.encode())
         wf.setnchannels(1)
         # audio_data = np.zeros([self.fs*max_num_channel, 1], dtype = np.short)
-        string_data = bytes((self.fs * max_num_channel * 2))
+        required_samples = int(12800)
+        string_data = bytes((required_samples * max_num_channel * 2))
         while True:
-            res = self.audio_device_dll.ReadPcm(string_data, self.fs)
+            res = self.audio_device_dll.ReadPcm(string_data, required_samples)
             audio_data = np.fromstring(string_data, dtype = np.short)
             audio_data1 = np.reshape(audio_data, (-1, max_num_channel))
             pcm_data = np.sum(audio_data1, axis=-1, dtype=np.short)

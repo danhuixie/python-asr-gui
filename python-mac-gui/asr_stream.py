@@ -35,7 +35,7 @@ class RealTimeStreamAsr():
         # open a pyAudio stream
         self.fs = 16000
         self.pa = pyaudio.PyAudio()
-        self.block_samples = self.fs
+        self.block_samples = 12800
         self.chunk = self.fs // 10
         try: 
             self.stream_info = pyaudio.PaMacCoreStreamInfo(pyaudio.PaMacCoreStreamInfo.paMacCoreConversionQualityHigh)
@@ -87,7 +87,7 @@ class RealTimeStreamAsr():
                 string_data.append(chunk_data)
             wf.writeframes(b''.join(string_data))
             audio_data = np.fromstring(b''.join(string_data), dtype = np.short)
-            audio_data *= 4
+            # audio_data *= 4
             # self.ws.diy_send_binary(audio_data)
             if self.ws._is_closed:
                 self.ws.connect()
